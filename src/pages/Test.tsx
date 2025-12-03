@@ -1,8 +1,10 @@
 const Test = () => {
   return (
-    <div className="h-[240px] w-full bg-sky-400 text-xl text-white">
-      이 공간은 라우팅 테스트용 코드이며, 추후 루트페이지(홈 페이지) 개발 완료시 대체 예정입니다.-
-      프로핏
+    <div className="mx-auto flex h-screen w-[50%] items-center justify-center bg-purple-400">
+      <div className="flex w-[50%] flex-col text-center">
+        <p className="text-[40px] font-[700]">Propit 웹 도메인</p>
+        <p className="text-[20px]">김석진 서아영 심채현 양지윤</p>
+      </div>
     </div>
   );
 };
