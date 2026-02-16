@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { SubmitEvent } from 'react';
+import type { FormEvent } from 'react';
 
 import logo from '../shared/assets/logoWhite.png';
 
@@ -12,7 +12,7 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignup = (e: SubmitEvent<HTMLFormElement>) => {
+  const handleSignup = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('회원가입 시도:', { name, email, password });
     navigate('/login');

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { SubmitEvent } from 'react';
+import type { FormEvent } from 'react';
 
 import logo from '../shared/assets/logoWhite.png';
 import confettiAnim from '../shared/assets/confetti.json';
@@ -27,7 +27,7 @@ export default function Login() {
     };
   }, []);
 
-  const handleLogin = (e: SubmitEvent<HTMLFormElement>) => {
+  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('로그인 시도:', { email, password });
     navigate('/');
