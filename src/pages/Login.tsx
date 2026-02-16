@@ -1,3 +1,4 @@
+import { loginApi } from '../shared/apis/auth';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Lottie from 'lottie-react';
@@ -27,10 +28,20 @@ export default function Login() {
     };
   }, []);
 
-  const handleLogin = (e: FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('로그인 시도:', { email, password });
-    navigate('/');
+
+    try {
+      const data = await loginApi({ email, password });
+      console.log('로그인 성공:', data);
+
+      // if (data?.accessToken) localStorage.setItem("accessToken", data.accessToken);
+
+      navigate('/');
+    } catch (err) {
+      console.error('로그인 실패:', err);
+      alert('서버가 켜져있는지/계정정보 확인');
+    }
   };
 
   return (

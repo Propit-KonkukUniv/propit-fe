@@ -1,3 +1,4 @@
+import { signupApi } from '../shared/apis/auth';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,14 +9,22 @@ import logo from '../shared/assets/logoWhite.png';
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSignup = (e: FormEvent<HTMLFormElement>) => {
+  const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('회원가입 시도:', { name, email, password });
-    navigate('/login');
+
+    try {
+      const data = await signupApi({ nickname, email, password });
+      console.log('회원가입 성공:', data);
+      alert('회원가입 완료!');
+      navigate('/login');
+    } catch (err) {
+      console.error('회원가입 실패:', err);
+      alert('서버가 켜져있는지/입력값 확인');
+    }
   };
 
   return (
@@ -53,10 +62,10 @@ export default function Signup() {
                 <form onSubmit={handleSignup} className="space-y-4">
                   <input
                     type="text"
-                    placeholder="이름"
+                    placeholder="닉네임"
                     className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
                     required
                   />
 
