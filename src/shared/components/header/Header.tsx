@@ -7,10 +7,10 @@ interface HeaderProps {
 
 const Header = ({ pageName }: HeaderProps) => {
   return (
-    <header className="flex h-[56px] w-full flex-row items-center justify-between bg-white px-5">
+    <header className="flex h-[56px] w-full flex-row items-center justify-between px-5">
       {/* 왼쪽 메뉴 아이콘 */}
       <button className="p-1">
-        <img src={menuIcon} alt="menu icon" className="h-6 w-6" />
+        <img src={menuIcon} alt="menu icon" className="h-[24px] w-[24px]" />
       </button>
 
       {/* 중앙 로고 및 페이지 명 */}

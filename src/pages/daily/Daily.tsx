@@ -10,13 +10,11 @@ const Daily = () => {
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
       <Header pageName="Daily" />
-
       <div className="flex flex-col gap-5 px-5 pt-6">
-        <section className="mb-1">
-          <p className="text-[14px] font-medium text-gray-500">2025년 12월 7일</p>
-          <h1 className="mt-1 text-[20px] font-bold">오늘의 거래 리포트</h1>
+        <section className="pl-[21px]">
+          <p className="text-[12px] font-[400] text-gray-500">2025년 12월 7일</p>
+          <h1 className="mt-1 text-[14px] font-[700]">오늘의 거래 리포트</h1>
         </section>
-
         <Box>
           <TodayResult />
         </Box>
