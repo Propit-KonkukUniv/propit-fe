@@ -6,7 +6,7 @@ import Daily from '../../pages/daily/Daily';
 
 const router = createBrowserRouter([
   {
-    path: '/login',
+    path: '/',
     element: <Login />,
   },
   {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: '/',
+    path: '/test',
     element: <Test />,
   },
   {
