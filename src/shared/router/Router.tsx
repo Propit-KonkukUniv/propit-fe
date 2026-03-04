@@ -3,10 +3,11 @@ import Test from '../../pages/Test';
 import Login from '../../pages/Login';
 import Signup from '../../pages/Signup';
 import Daily from '../../pages/daily/Daily';
+import Statistics from '../../pages/statistics/Statistics';
 
 const router = createBrowserRouter([
   {
-    path: '/login',
+    path: '/',
     element: <Login />,
   },
   {
@@ -14,12 +15,16 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: '/',
+    path: '/test',
     element: <Test />,
   },
   {
     path: '/daily',
     element: <Daily />,
+  },
+  {
+    path: '/statistics',
+    element: <Statistics />,
   },
 ]);
 

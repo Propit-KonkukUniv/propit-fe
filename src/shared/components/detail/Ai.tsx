@@ -1,5 +1,5 @@
-import ai from '../../../shared/assets/daily/ai.svg';
-import boomup from '../../../shared/assets/daily/boomup.svg';
+import ai from '../../../shared/assets/common/ai.svg';
+import boomup from '../../../shared/assets/common/boomup.svg';
 import point from '../../../shared/assets/daily/point.svg';
 import caution from '../../../shared/assets/daily/caution.svg';
 

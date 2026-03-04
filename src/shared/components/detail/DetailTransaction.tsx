@@ -1,4 +1,4 @@
-import graph from '../../../shared/assets/daily/graph.svg';
+import graph from '../../../shared/assets/common/graph.svg';
 import rightArrow from '../../../shared/assets/common/rightArrow.svg'; // Header에서 쓰던 화살표 재사용
 
 const DetailTransaction = () => {
