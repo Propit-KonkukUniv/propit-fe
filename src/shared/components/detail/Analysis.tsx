@@ -1,6 +1,6 @@
 import emotion from '../../../shared/assets/daily/emotion.svg';
-import confidence from '../../../shared/assets/daily/emotionTags/confidence.svg';
-import thinking from '../../../shared/assets/daily/emotionTags/thinking.svg';
+import confidence from '../../../shared/assets/common/emotionTags/confidence.svg';
+import thinking from '../../../shared/assets/common/emotionTags/thinking.svg';
 
 const Analysis = () => {
   const analysisData = [

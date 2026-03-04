@@ -1,4 +1,4 @@
-import coin from '../../../shared/assets/daily/coin.svg';
+import coin from '../../../shared/assets/common/coin.svg';
 
 const TodayResult = () => {
   return (
