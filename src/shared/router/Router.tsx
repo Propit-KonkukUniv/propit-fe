@@ -4,6 +4,7 @@ import Login from '../../pages/Login';
 import Signup from '../../pages/Signup';
 import Daily from '../../pages/daily/Daily';
 import Statistics from '../../pages/statistics/Statistics';
+import Write from '../../pages/write/Write';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/statistics',
     element: <Statistics />,
+  },
+  {
+    path: '/write',
+    element: <Write />,
   },
 ]);
 
