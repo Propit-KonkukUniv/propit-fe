@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '@components/header/Header';
@@ -31,6 +31,22 @@ const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, C
   { label: '평균 수익률', value: '+24.5%' },
 ];
 
+const HISTORY_LEFT_ICON = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="h-5 w-5 text-[#646BFA]"
+    aria-hidden="true"
+  >
+    <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C10.298 22 8.69525 21.5748 7.29229 20.8248L2 22L3.17629 16.7097C2.42562 15.3063 2 13.7028 2 12C2 6.47715 6.47715 2 12 2ZM13 7H11V14H17V12H13V7Z"></path>
+  </svg>
+);
+
+function shuffle<T>(arr: T[]) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
 const Home = () => {
   const navigate = useNavigate();
 
@@ -39,13 +55,6 @@ const Home = () => {
   const todayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일 ${weekdays[d.getDay()]}요일`;
 
   const [top3, setTop3] = useState<Top3Item[]>(TOP3);
-
-  const shuffledTop3 = useMemo(() => {
-    return [...top3]
-      .map((item) => ({ item, r: Math.random() }))
-      .sort((a, b) => a.r - b.r)
-      .map(({ item }) => item);
-  }, [top3]);
 
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
@@ -67,7 +76,7 @@ const Home = () => {
         </Box>
 
         <Box>
-          <Top3Card iconSrc={graphIcon} items={top3} onRefresh={() => setTop3(shuffledTop3)} />
+          <Top3Card iconSrc={graphIcon} items={top3} onRefresh={() => setTop3((prev) => shuffle(prev))} />
         </Box>
 
         <Box>
@@ -85,17 +94,7 @@ const Home = () => {
           >
             <LinkCard
               label="이전 매매 보러가기"
-              leftIcon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  className="h-5 w-5 text-[#646BFA]"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C10.298 22 8.69525 21.5748 7.29229 20.8248L2 22L3.17629 16.7097C2.42562 15.3063 2 13.7028 2 12C2 6.47715 6.47715 2 12 2ZM13 7H11V14H17V12H13V7Z"></path>
-                </svg>
-              }
+              leftIcon={HISTORY_LEFT_ICON}
             />
           </button>
         </Box>
