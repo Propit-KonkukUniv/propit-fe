@@ -34,7 +34,7 @@ export default function Login() {
       console.log('로그인 성공:', data);
 
       // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
-      navigate('/daily');
+      navigate('/home');
     } catch (err) {
       console.error('로그인 실패:', err);
       alert('서버가 켜져있는지/계정정보 확인');

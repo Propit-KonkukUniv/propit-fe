@@ -58,7 +58,10 @@ const Nav = ({ isOpen, onClose }: NavProps) => {
         <div className="flex flex-col gap-8 text-[15px] text-gray-800">
           {/* 기본 메뉴 */}
           <div className="flex flex-col gap-4">
-            <button className="text-left font-medium transition-colors hover:text-[#646BFA]">
+            <button
+              className="text-left font-medium transition-colors hover:text-[#646BFA]"
+              onClick={() => handleNavigate('/home')}
+            >
               홈
             </button>
             <button
