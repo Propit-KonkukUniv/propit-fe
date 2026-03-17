@@ -14,6 +14,7 @@ import Top3Card, { type Top3Item } from '@shared/components/home/Top3Card';
 import BadgeCard from '@shared/components/home/BadgeCard';
 import CumulativeReportCard, { type CumulativeStatItem } from '@shared/components/home/CumulativeReportCard';
 import LinkCard from '@shared/components/home/LinkCard';
+import Greeting from '@shared/components/home/Greeting';
 
 const ROUTINE_ITEMS = ['심사숙고', '단타 절대 금지X', '분할매수하기!!'];
 
@@ -51,10 +52,7 @@ const Home = () => {
       <Header pageName="Home" />
 
       <div className="flex flex-col gap-5 px-5 pt-6">
-        <section className="pl-[2px]">
-          <p className="text-[16px] font-bold text-black">안녕하세요!</p>
-          <p className="mt-1 text-[12px] font-medium text-gray-500">오늘도 현명한 투자 되세요</p>
-        </section>
+        <Greeting />
 
         <Box>
           <WritePromptCard
