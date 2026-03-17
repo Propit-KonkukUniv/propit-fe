@@ -1,10 +1,10 @@
-import { signupApi } from '../shared/apis/auth';
+import { signupApi } from '@shared/apis/auth';
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { FormEvent } from 'react';
 
-import logo from '../shared/assets/logoWhite.png';
+import logo from '@assets/logoWhite.png';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -37,12 +37,10 @@ export default function Signup() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              {/* 로고 */}
               <div className="flex justify-center">
                 <img src={logo} alt="Propit 로고" className="h-10 w-auto" />
               </div>
 
-              {/* 슬로건 */}
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -52,7 +50,6 @@ export default function Signup() {
                 현명한 투자의 시작
               </motion.p>
 
-              {/* 폼 */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
