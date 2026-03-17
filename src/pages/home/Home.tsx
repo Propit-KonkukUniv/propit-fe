@@ -83,7 +83,20 @@ const Home = () => {
             className="flex w-full items-center justify-between p-5 text-left"
             onClick={() => navigate('/daily')}
           >
-            <LinkCard label="이전 매매 보러가기" />
+            <LinkCard
+              label="이전 매매 보러가기"
+              leftIcon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="h-5 w-5 text-[#646BFA]"
+                  aria-hidden="true"
+                >
+                  <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C10.298 22 8.69525 21.5748 7.29229 20.8248L2 22L3.17629 16.7097C2.42562 15.3063 2 13.7028 2 12C2 6.47715 6.47715 2 12 2ZM13 7H11V14H17V12H13V7Z"></path>
+                </svg>
+              }
+            />
           </button>
         </Box>
       </div>
