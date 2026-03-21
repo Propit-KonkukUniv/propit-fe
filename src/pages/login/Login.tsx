@@ -1,12 +1,12 @@
-import { loginApi } from '../shared/apis/auth';
+import { loginApi } from '@shared/apis/auth';
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { FormEvent } from 'react';
 
-import logo from '../shared/assets/logoWhite.png';
-import confettiAnim from '../shared/assets/confetti.json';
+import logo from '@assets/logoWhite.png';
+import confettiAnim from '@assets/confetti.json';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,9 +14,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // 로티 잠깐 보여주고 사라지게
   const [showLottie, setShowLottie] = useState(true);
-  // 로티 끝나고 폼 등장
   const [showUI, setShowUI] = useState(false);
 
   useEffect(() => {
@@ -35,9 +33,8 @@ export default function Login() {
       const data = await loginApi({ email, password });
       console.log('로그인 성공:', data);
 
-      // if (data?.accessToken) localStorage.setItem("accessToken", data.accessToken);
-
-      navigate('/');
+      // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
+      navigate('/home');
     } catch (err) {
       console.error('로그인 실패:', err);
       alert('서버가 켜져있는지/계정정보 확인');
@@ -66,7 +63,6 @@ export default function Login() {
         )}
       </AnimatePresence>
 
-      {/* 중앙 */}
       <div className="flex w-full flex-1 items-center justify-center">
         <div className="mx-auto w-full max-w-[380px]">
           <AnimatePresence>
@@ -76,12 +72,10 @@ export default function Login() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
               >
-                {/* 로고 */}
                 <div className="flex justify-center">
                   <img src={logo} alt="Propit 로고" className="h-10 w-auto" />
                 </div>
 
-                {/* 슬로건 */}
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -91,7 +85,6 @@ export default function Login() {
                   현명한 투자의 시작
                 </motion.p>
 
-                {/* 폼 */}
                 <motion.div
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
