@@ -1,23 +1,23 @@
-import { signupApi } from '../shared/apis/auth';
+import { userSignupApi } from '@shared/apis/user/userApi';
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { FormEvent } from 'react';
 
-import logo from '../shared/assets/logoWhite.png';
+import logo from '@assets/logoWhite.png';
 
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const data = await signupApi({ nickname, email, password });
+      const data = await userSignupApi({ email, nickname, password });
       console.log('회원가입 성공:', data);
       alert('회원가입 완료!');
       navigate('/login');
@@ -37,12 +37,10 @@ export default function Signup() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              {/* 로고 */}
               <div className="flex justify-center">
                 <img src={logo} alt="Propit 로고" className="h-10 w-auto" />
               </div>
 
-              {/* 슬로건 */}
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -52,7 +50,6 @@ export default function Signup() {
                 현명한 투자의 시작
               </motion.p>
 
-              {/* 폼 */}
               <motion.div
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -61,20 +58,20 @@ export default function Signup() {
               >
                 <form onSubmit={handleSignup} className="space-y-4">
                   <input
-                    type="text"
-                    placeholder="닉네임"
-                    className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
-                    value={nickname}
-                    onChange={(e) => setNickname(e.target.value)}
-                    required
-                  />
-
-                  <input
                     type="email"
                     placeholder="이메일"
                     className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="닉네임"
+                    className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value)}
                     required
                   />
 
