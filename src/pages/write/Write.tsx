@@ -1,13 +1,15 @@
-import { useState, useRef } from 'react';
+//import { useState, useRef } from 'react';
 import Header from '../../shared/components/header/Header';
 import Box from '../../shared/components/box/Box';
 import WriteForm from '../../shared/components/write/WriteForm';
-import uploadIcon from '@assets/write/upload.svg';
+//import uploadIcon from '@assets/write/upload.svg';
 
 const Write = () => {
-  const [fileName, setFileName] = useState('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  //const [fileName, setFileName] = useState('');
+  //const fileInputRef = useRef<HTMLInputElement>(null);
 
+  {
+    /*
   const handleUploadClick = () => {
     fileInputRef.current?.click();
   };
@@ -17,7 +19,8 @@ const Write = () => {
       setFileName(e.target.files[0].name);
     }
   };
-
+*/
+  }
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
       <Header pageName="Write" />
@@ -33,6 +36,7 @@ const Write = () => {
         </Box>
 
         {/* 사진 업로드 버튼 */}
+        {/* 
         <div className="flex flex-col gap-2">
           <button
             onClick={handleUploadClick}
@@ -44,7 +48,7 @@ const Write = () => {
           <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
           {fileName && <p className="pl-1 text-[12px] text-gray-400">{fileName}</p>}
         </div>
-
+        */}
         {/* 저장하기 버튼 */}
         <button className="mt-2 h-[60px] w-full rounded-[12px] bg-[#646BFA] text-[18px] font-bold text-white shadow-lg transition-transform active:scale-[0.98]">
           저장하기

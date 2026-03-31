@@ -11,10 +11,11 @@ import emotiontag from '@assets/write/emotiontag.svg';
 const WriteForm = () => {
   const [sellDate, setSellDate] = useState('');
   const [buyDate, setBuyDate] = useState('');
+  const [sectorName, setSectorName] = useState('');
   const [priceBuy, setPriceBuy] = useState('');
   const [priceSell, setPriceSell] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [duration, setDuration] = useState('');
+  //  const [duration, setDuration] = useState('');
   const [dateError, setDateError] = useState('');
 
   // 금액 콤마 처리 함수
@@ -33,10 +34,10 @@ const WriteForm = () => {
 
       if (diffDays < 0) {
         setDateError('구매일자가 판매일자보다 늦습니다.');
-        setDuration('');
+        //setDuration('');
       } else {
         setDateError('');
-        setDuration(`${diffDays}일`);
+        //setDuration(`${diffDays}일`);
       }
     }
   }, [buyDate, sellDate]);
@@ -66,6 +67,21 @@ const WriteForm = () => {
         <input
           type="text"
           placeholder="예: 테슬라"
+          className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none"
+        />
+      </div>
+
+      {/* 업종명 */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <img src={graph} alt="graph" className="w-5" />
+          <span className="text-[14px] font-bold">업종명</span>
+        </div>
+        <input
+          type="text"
+          value={sectorName}
+          onChange={(e) => setSectorName(e.target.value)}
+          placeholder="예: IT"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none"
         />
       </div>
@@ -123,16 +139,18 @@ const WriteForm = () => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <img src={calendertimer} alt="timer" className="w-5" />
-          <span className="text-[14px] font-bold">보유 기간</span>
+          <span className="text-[14px] font-bold">보유 기간 (구매일자를 선택해주세요)</span>
         </div>
         <input
           type="date"
           onChange={(e) => setBuyDate(e.target.value)}
           className="mb-1 w-full rounded-lg border border-gray-200 p-3 text-[14px]"
         />
+        {/* 
         <div className="min-h-[48px] w-full rounded-lg bg-gray-50 p-3 text-[14px] text-gray-700">
           {duration || '구매일자를 선택해주세요'}
         </div>
+        */}
         {dateError && <p className="pl-1 text-[12px] font-medium text-red-500">{dateError}</p>}
       </div>
 
