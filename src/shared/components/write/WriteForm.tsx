@@ -70,6 +70,19 @@ const WriteForm = () => {
         />
       </div>
 
+      {/* 업종명 */}
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <img src={graph} alt="graph" className="w-5" />
+          <span className="text-[14px] font-bold">업종명</span>
+        </div>
+        <input
+          type="text"
+          placeholder="예: IT"
+          className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none"
+        />
+      </div>
+
       {/* 가격 라인 */}
       <div className="flex gap-3">
         <div className="flex flex-1 flex-col gap-2">
