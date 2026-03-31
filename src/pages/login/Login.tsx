@@ -1,4 +1,4 @@
-import { loginApi } from '@shared/apis/auth';
+import { userLoginApi } from '@shared/apis/user/userApi';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
@@ -30,7 +30,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await loginApi({ nickname, password });
+      const data = await userLoginApi({ nickname, password });
       console.log('로그인 성공:', data);
 
       // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리

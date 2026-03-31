@@ -1,4 +1,4 @@
-import { signupApi } from '@shared/apis/auth';
+import { userSignupApi } from '@shared/apis/user/userApi';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -16,7 +16,7 @@ export default function Signup() {
     e.preventDefault();
 
     try {
-      const data = await signupApi({ nickname, password });
+      const data = await userSignupApi({ nickname, password });
       console.log('회원가입 성공:', data);
       alert('회원가입 완료!');
       navigate('/login');
