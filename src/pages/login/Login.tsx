@@ -1,4 +1,5 @@
 import { userLoginApi } from '@shared/apis/user/userApi';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
@@ -11,7 +12,7 @@ import confettiAnim from '@assets/confetti.json';
 export default function Login() {
   const navigate = useNavigate();
 
-  const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [showLottie, setShowLottie] = useState(true);
@@ -30,14 +31,21 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await userLoginApi({ nickname, password });
+      const data = await userLoginApi({ email, password });
       console.log('로그인 성공:', data);
 
       // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
       navigate('/home');
     } catch (err) {
       console.error('로그인 실패:', err);
-      alert('서버가 켜져있는지/계정정보 확인');
+      if (axios.isAxiosError(err)) {
+        const message =
+          (err.response?.data as { message?: string } | undefined)?.message ??
+          `로그인 실패 (${err.response?.status ?? 'network'})`;
+        alert(message);
+        return;
+      }
+      alert('로그인 실패');
     }
   };
 
@@ -93,11 +101,11 @@ export default function Login() {
                 >
                   <form onSubmit={handleLogin} className="space-y-4">
                     <input
-                      type="text"
-                      placeholder="닉네임"
+                      type="email"
+                      placeholder="이메일"
                       className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
-                      value={nickname}
-                      onChange={(e) => setNickname(e.target.value)}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                     />
 
