@@ -1,4 +1,5 @@
-import { loginApi } from '@shared/apis/auth';
+import { userLoginApi } from '@shared/apis/user/userApi';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Lottie from 'lottie-react';
@@ -30,14 +31,21 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await loginApi({ email, password });
+      const data = await userLoginApi({ email, password });
       console.log('로그인 성공:', data);
 
       // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
       navigate('/home');
     } catch (err) {
       console.error('로그인 실패:', err);
-      alert('서버가 켜져있는지/계정정보 확인');
+      if (axios.isAxiosError(err)) {
+        const message =
+          (err.response?.data as { message?: string } | undefined)?.message ??
+          `로그인 실패 (${err.response?.status ?? 'network'})`;
+        alert(message);
+        return;
+      }
+      alert('로그인 실패');
     }
   };
 

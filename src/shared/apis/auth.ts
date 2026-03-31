@@ -1,14 +1,14 @@
 import api from './axios';
 
 export type LoginRequest = {
-  email: string;
+  nickname: string;
   password: string;
 };
 
 export type SignupRequest = {
   email: string;
-  password: string;
   nickname: string;
+  password: string;
 };
 
 export async function loginApi(body: LoginRequest) {

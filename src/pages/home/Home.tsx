@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '@components/header/Header';
@@ -17,6 +17,7 @@ import LinkCard from '@shared/components/home/LinkCard';
 import Greeting from '@shared/components/home/Greeting';
 
 import historyIcon from '@assets/home/history.svg';
+import { getHomeApi, type HomePayload } from '@shared/apis/home/homeApi';
 
 const ROUTINE_ITEMS = ['심사숙고', '단타 절대 금지X', '분할매수하기!!'];
 
@@ -47,6 +48,33 @@ const Home = () => {
   const todayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일 ${weekdays[d.getDay()]}요일`;
 
   const [top3, setTop3] = useState<Top3Item[]>(TOP3);
+  const [homeData, setHomeData] = useState<HomePayload | null>(null);
+
+  useEffect(() => {
+    const fetchHome = async () => {
+      try {
+        const data = await getHomeApi();
+        setHomeData(data);
+      } catch (err) {
+        console.error('홈 데이터 조회 실패:', err);
+      }
+    };
+    fetchHome();
+  }, []);
+
+  const cumulativeFromApi: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
+    homeData?.cumulativeReport.exists && homeData.cumulativeReport.data
+      ? [
+          { label: '총 거래 횟수', value: `${homeData.cumulativeReport.data.totalTradeCount}회` },
+          { label: '승률', value: `${homeData.cumulativeReport.data.winRate}%` },
+          {
+            label: '누적 손익',
+            value: `${homeData.cumulativeReport.data.totalProfit.toLocaleString()}원`,
+            variant: 'primary',
+          },
+          { label: '평균 수익률', value: `${homeData.cumulativeReport.data.avgReturnRate}%` },
+        ]
+      : CUMULATIVE;
 
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
@@ -60,6 +88,7 @@ const Home = () => {
             todayLabel={todayLabel}
             calendarIconSrc={calenderIcon}
             onWrite={() => navigate('/write')}
+            message={homeData?.todayMood.message ?? undefined}
           />
         </Box>
 
@@ -76,7 +105,7 @@ const Home = () => {
         </Box>
 
         <Box>
-          <CumulativeReportCard items={CUMULATIVE} onMore={() => navigate('/statistics')} />
+          <CumulativeReportCard items={cumulativeFromApi} onMore={() => navigate('/statistics')} />
         </Box>
 
         <Box className="cursor-pointer">
