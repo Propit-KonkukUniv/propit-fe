@@ -11,7 +11,7 @@ import confettiAnim from '@assets/confetti.json';
 export default function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
 
   const [showLottie, setShowLottie] = useState(true);
@@ -30,7 +30,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await loginApi({ email, password });
+      const data = await loginApi({ nickname, password });
       console.log('로그인 성공:', data);
 
       // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
@@ -93,11 +93,11 @@ export default function Login() {
                 >
                   <form onSubmit={handleLogin} className="space-y-4">
                     <input
-                      type="email"
-                      placeholder="이메일"
+                      type="text"
+                      placeholder="닉네임"
                       className="mx-auto block w-full max-w-[320px] rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-white placeholder-white/70 backdrop-blur-md focus:outline-none focus:ring-2 focus:ring-white/60"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)}
                       required
                     />
 
