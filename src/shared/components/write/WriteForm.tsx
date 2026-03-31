@@ -11,6 +11,7 @@ import emotiontag from '@assets/write/emotiontag.svg';
 const WriteForm = () => {
   const [sellDate, setSellDate] = useState('');
   const [buyDate, setBuyDate] = useState('');
+  const [sectorName, setSectorName] = useState('');
   const [priceBuy, setPriceBuy] = useState('');
   const [priceSell, setPriceSell] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -78,6 +79,8 @@ const WriteForm = () => {
         </div>
         <input
           type="text"
+          value={sectorName}
+          onChange={(e) => setSectorName(e.target.value)}
           placeholder="예: IT"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none"
         />

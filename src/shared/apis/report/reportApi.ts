@@ -1,5 +1,3 @@
-// src/apis/report/reportApi.ts
-
 import api from '../axios';
 
 // ==========================================
@@ -123,7 +121,7 @@ export const getDailyReport = async (
 // 누적 ai 리포트 조회 (GET)
 // 명세서상 BaseResponse 형태(success, code 등) 없이 바로 데이터가 온다고 가정하여 작성했습니다.
 // 만약 백엔드에서 success, code 등으로 한 번 감싸서 보낸다면 Promise<BaseResponse<OverviewReportData>> 로 변경하면 됩니다!
-export const getOverviewReport = async (): Promise<OverviewReportData> => {
+export const getOverviewReport = async (): Promise<BaseResponse<OverviewReportData>> => {
   const response = await api.get('/reports/overview');
   return response.data;
 };
