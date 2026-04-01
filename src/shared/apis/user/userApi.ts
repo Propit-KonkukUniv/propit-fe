@@ -17,7 +17,20 @@ export interface UserUpdateNicknameRequest {
 
 export async function userLoginApi(body: UserLoginRequest) {
   const res = await api.post('/users/login', body);
-  return res.data;
+  const responseData = res.data;
+
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+
+  if (responseData.success && responseData.data?.accessToken) {
+    localStorage.setItem('accessToken', responseData.data.accessToken);
+
+    if (responseData.data.refreshToken) {
+      localStorage.setItem('refreshToken', responseData.data.refreshToken);
+    }
+  }
+
+  return responseData;
 }
 
 export async function userSignupApi(body: UserSignupRequest) {

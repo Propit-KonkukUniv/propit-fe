@@ -6,15 +6,15 @@ import api from '../axios';
 
 // 생성 및 수정 요청에 쓰이는 Body 데이터 타입 (상세 조회의 data와 동일)
 export interface TradeLogRequest {
-  sellDate: string;
-  stockName: string;
-  sectorName: string;
-  buyPrice: number;
-  sellPrice: number;
-  quantity: number;
-  holdingDays: number;
-  reason: string;
-  emotionTags: string[];
+  sellDate: string; // 판매일
+  stockName: string; // 종목명
+  sectorName: string; // 업종명
+  buyPrice: number; // 1주당 구매 가격
+  sellPrice: number; // 1주당 판매 가격
+  quantity: number; // 수량
+  holdingDays: number; // 보유 기간
+  reason: string; // 판매 이유
+  emotionTags: string[]; // 감정 태그 (예: ['기쁨', '슬픔'])
 }
 
 // 전체 조회 시 배열 안에 들어가는 개별 아이템 타입
@@ -48,6 +48,21 @@ export interface GetTradeLogDetailResponse extends BaseResponse {
 // 매매 기록 생성
 export const createTradeLog = async (body: TradeLogRequest): Promise<BaseResponse> => {
   const response = await api.post('/tradelogs', body);
+
+  const accessToken = localStorage.getItem('accessToken');
+  const requestHeaders = {
+    'Content-Type': 'application/json',
+    Authorization: accessToken ? `Bearer ${accessToken}` : 'NO_ACCESS_TOKEN',
+  };
+
+  console.log('[createTradeLog] request', {
+    url: '/tradelogs',
+    method: 'POST',
+    accessToken,
+    headers: requestHeaders,
+    body,
+  });
+
   return response.data;
 };
 
