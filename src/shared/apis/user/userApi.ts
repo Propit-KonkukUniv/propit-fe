@@ -18,10 +18,13 @@ export interface UserUpdateNicknameRequest {
 export async function userLoginApi(body: UserLoginRequest) {
   const res = await api.post('/users/login', body);
   const responseData = res.data;
+
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+
   if (responseData.success && responseData.data?.accessToken) {
     localStorage.setItem('accessToken', responseData.data.accessToken);
 
-    // 리프레시 토큰도 있다면 같이 저장해두는 게 좋아!
     if (responseData.data.refreshToken) {
       localStorage.setItem('refreshToken', responseData.data.refreshToken);
     }

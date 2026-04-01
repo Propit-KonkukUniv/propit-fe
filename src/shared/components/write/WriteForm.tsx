@@ -1,6 +1,6 @@
 import calender from '@assets/common/calender.svg';
-import graph from '@assets/common/graph.svg';
 import coin from '@assets/common/coin.svg';
+import graph from '@assets/common/graph.svg';
 import calendertimer from '@assets/write/calender.svg';
 import emotiontag from '@assets/write/emotiontag.svg';
 import leftarrow from '@assets/write/leftarrow_circle.svg';
@@ -27,12 +27,19 @@ const formatPrice = (value: number): string => {
     return '';
   }
 
-  return value.toLocaleString();
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 20,
+  });
 };
 
-const parseNumber = (value: string): number => {
-  const numericValue = value.replace(/[^\d]/g, '');
-  return numericValue ? Number(numericValue) : 0;
+const parsePrice = (value: string): number => {
+  const normalizedValue = value.replace(/,/g, '').replace(/[^\d.]/g, '');
+  const [integerPart = '', decimalPart = ''] = normalizedValue.split('.');
+  const sanitizedValue =
+    decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
+
+  return sanitizedValue ? Number(sanitizedValue) : 0;
 };
 
 const WriteForm = ({
@@ -69,7 +76,7 @@ const WriteForm = ({
           type="text"
           value={tradeLogRequest.stockName}
           onChange={(event) => onTradeLogRequestChange('stockName', event.target.value)}
-          placeholder="예: 테슬라"
+          placeholder="예: Tesla"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
         />
       </div>
@@ -97,11 +104,9 @@ const WriteForm = ({
           <input
             type="text"
             value={formatPrice(tradeLogRequest.buyPrice)}
-            onChange={(event) =>
-              onTradeLogRequestChange('buyPrice', parseNumber(event.target.value))
-            }
+            onChange={(event) => onTradeLogRequestChange('buyPrice', parsePrice(event.target.value))}
             placeholder="0"
-            inputMode="numeric"
+            inputMode="decimal"
             className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
           />
         </div>
@@ -114,10 +119,10 @@ const WriteForm = ({
             type="text"
             value={formatPrice(tradeLogRequest.sellPrice)}
             onChange={(event) =>
-              onTradeLogRequestChange('sellPrice', parseNumber(event.target.value))
+              onTradeLogRequestChange('sellPrice', parsePrice(event.target.value))
             }
             placeholder="0"
-            inputMode="numeric"
+            inputMode="decimal"
             className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
           />
         </div>

@@ -47,6 +47,8 @@ export interface GetTradeLogDetailResponse extends BaseResponse {
 
 // 매매 기록 생성
 export const createTradeLog = async (body: TradeLogRequest): Promise<BaseResponse> => {
+  const response = await api.post('/tradelogs', body);
+
   const accessToken = localStorage.getItem('accessToken');
   const requestHeaders = {
     'Content-Type': 'application/json',
@@ -61,7 +63,6 @@ export const createTradeLog = async (body: TradeLogRequest): Promise<BaseRespons
     body,
   });
 
-  const response = await api.post('/tradelogs', body);
   return response.data;
 };
 
