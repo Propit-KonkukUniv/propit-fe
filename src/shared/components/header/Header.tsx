@@ -19,7 +19,7 @@ const Header = ({ pageName }: HeaderProps) => {
       <header className="flex h-[56px] w-full flex-row items-center justify-between px-5">
         {/* 왼쪽 메뉴 아이콘 */}
         <button className="p-0.5" onClick={toggleNav}>
-          <img src={menuIcon} alt="menu icon" className="h-[22px] w-[22px]" />
+          <img src={menuIcon} alt="menu icon" className="h-[20px] w-[20px]" />
         </button>
 
         {/* 중앙 로고 및 페이지 명 */}
