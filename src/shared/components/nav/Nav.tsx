@@ -96,9 +96,6 @@ const Nav = ({ isOpen, onClose }: NavProps) => {
               이전 일지 보기
             </button>
             <button className="text-left transition-colors hover:text-[#646BFA]">
-              트레이더 칭호
-            </button>
-            <button className="text-left transition-colors hover:text-[#646BFA]">
               루틴 등록하기
             </button>
           </div>
