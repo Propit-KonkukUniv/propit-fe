@@ -96,7 +96,7 @@ const Home = () => {
         </Box>
 
         <Box>
-          <BadgeCard title="탐험가" subtitle="20개 이상 종목 보유" onMore={() => {}} />
+          <BadgeCard title="탐험가" subtitle="20개 이상 종목 보유" />
         </Box>
 
         <Box>
