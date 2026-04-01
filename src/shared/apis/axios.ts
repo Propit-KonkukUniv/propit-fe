@@ -20,8 +20,14 @@ api.interceptors.request.use((config) => {
     return config;
   }
 
-  const token = localStorage.getItem('accessToken');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  let token = localStorage.getItem('accessToken');
+
+  if (token) {
+    // 토큰 양끝에 있는 쌍따옴표나 홑따옴표를 제거합니다.
+    token = token.replace(/^["']|["']$/g, '');
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 });
 
