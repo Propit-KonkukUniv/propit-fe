@@ -36,10 +36,6 @@ const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, C
 
 const HISTORY_LEFT_ICON = <img src={historyIcon} alt="" className="h-5 w-5" aria-hidden="true" />;
 
-function shuffle<T>(arr: T[]) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
-
 const Home = () => {
   const navigate = useNavigate();
 
@@ -47,7 +43,6 @@ const Home = () => {
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const todayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일 ${weekdays[d.getDay()]}요일`;
 
-  const [top3, setTop3] = useState<Top3Item[]>(TOP3);
   const [homeData, setHomeData] = useState<HomePayload | null>(null);
 
   useEffect(() => {
@@ -97,7 +92,7 @@ const Home = () => {
         </Box>
 
         <Box>
-          <Top3Card iconSrc={graphIcon} items={top3} onRefresh={() => setTop3((prev) => shuffle(prev))} />
+          <Top3Card iconSrc={graphIcon} items={TOP3} />
         </Box>
 
         <Box>

@@ -1,5 +1,3 @@
-import refreshIcon from '@assets/home/refresh.svg';
-
 export interface Top3Item {
   name: string;
   pct: string;
@@ -9,10 +7,9 @@ export interface Top3Item {
 interface Top3CardProps {
   iconSrc: string;
   items: Top3Item[];
-  onRefresh?: () => void;
 }
 
-const Top3Card = ({ iconSrc, items, onRefresh }: Top3CardProps) => {
+const Top3Card = ({ iconSrc, items }: Top3CardProps) => {
   return (
     <div className="p-5">
       <div className="mb-4 flex items-center justify-between">
@@ -20,13 +17,6 @@ const Top3Card = ({ iconSrc, items, onRefresh }: Top3CardProps) => {
           <img src={iconSrc} alt="graph" className="h-5 w-5" />
           <span className="text-[14px] font-bold text-black">실시간 거래량 TOP3</span>
         </div>
-        <button
-          className="text-gray-400 disabled:opacity-40"
-          onClick={onRefresh}
-          disabled={!onRefresh}
-        >
-          <img src={refreshIcon} alt="" className="h-5 w-5" aria-hidden="true" />
-        </button>
       </div>
 
       <div className="space-y-3 text-[13px]">
