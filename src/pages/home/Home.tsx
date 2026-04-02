@@ -57,6 +57,7 @@ const Home = () => {
     fetchHome();
   }, []);
 
+  // 1. 누적 리포트 데이터 처리 (응답 2번째 케이스 대응)
   const cumulativeFromApi: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
     homeData?.cumulativeReport.exists && homeData.cumulativeReport.data
       ? [
@@ -69,7 +70,7 @@ const Home = () => {
           },
           { label: '평균 수익률', value: `${homeData.cumulativeReport.data.avgReturnRate}%` },
         ]
-      : CUMULATIVE;
+      : CUMULATIVE; // 데이터 없을 때 보여줄 기본값 (또는 빈 값 처리 가능)
 
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
@@ -78,12 +79,17 @@ const Home = () => {
       <div className="flex flex-col gap-5 px-5 pt-6">
         <Greeting />
 
+        {/* 2. 오늘 기록 여부에 따른 카드 표시 (응답 1, 3번째 케이스 대응) */}
         <Box>
           <WritePromptCard
             todayLabel={todayLabel}
             calendarIconSrc={calenderIcon}
             onWrite={() => navigate('/write')}
-            message={homeData?.todayMood.message ?? undefined}
+            message={
+              homeData?.todayMood.exists
+                ? `오늘의 기분 '${homeData.todayMood.mood ?? ''}'`
+                : (homeData?.todayMood.message ?? undefined)
+            }
           />
         </Box>
 
@@ -99,19 +105,22 @@ const Home = () => {
           <BadgeCard title="탐험가" subtitle="20개 이상 종목 보유" />
         </Box>
 
-        <Box>
-          <CumulativeReportCard items={cumulativeFromApi} onMore={() => navigate('/statistics')} />
-        </Box>
+        {/* 3. 누적 데이터 존재 여부에 따라 카드 렌더링 결정 */}
+        {homeData?.cumulativeReport.exists ? (
+          <Box>
+            <CumulativeReportCard items={cumulativeFromApi} onMore={() => navigate('/statistics')} />
+          </Box>
+        ) : (
+          /* 누적 데이터가 아예 없을 때(응답 3번째 상황 등) 숨기거나 대체 UI를 보여줄 수 있습니다 */
+          <div className="text-center text-gray-400 py-4 text-sm">아직 누적 리포트 데이터가 없습니다.</div>
+        )}
 
         <Box className="cursor-pointer">
           <button
             className="flex w-full items-center justify-between p-5 text-left"
             onClick={() => navigate('/daily')}
           >
-            <LinkCard
-              label="이전 매매 보러가기"
-              leftIcon={HISTORY_LEFT_ICON}
-            />
+            <LinkCard label="이전 매매 보러가기" leftIcon={HISTORY_LEFT_ICON} />
           </button>
         </Box>
       </div>

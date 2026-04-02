@@ -21,6 +21,19 @@ api.interceptors.request.use((config) => {
   }
 
   let token = localStorage.getItem('accessToken');
+    
+  if (token) {
+    // 1. JSON.stringify로 저장되어 따옴표가 붙은 경우를 대비해 안전하게 파싱합니다.
+    const cleanToken = token.startsWith('"') ? JSON.parse(token) : token;
+    
+    // 2. 헤더 객체가 존재하는지 확인 후 토큰 주입 (공백 한 칸 확인 필수)
+    if (config.headers) {
+      config.headers.Authorization = `Bearer ${cleanToken.trim()}`;
+    }
+  }
+  
+  console.log("현재 요청 URL:", config.url);
+  console.log("가져온 토큰:", token);
 
   if (token) {
     // 토큰 양끝에 있는 쌍따옴표나 홑따옴표를 제거합니다.
