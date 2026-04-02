@@ -1,4 +1,10 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import {
+  getDailyReport,
+  type DailyReportData,
+  type DailyReportRequest,
+} from '../../shared/apis/report/reportApi';
 import Box from '../../shared/components/box/Box';
 import Advice from '../../shared/components/detail/Advice';
 import Ai from '../../shared/components/detail/Ai';
@@ -6,11 +12,6 @@ import Analysis from '../../shared/components/detail/Analysis';
 import DetailTransaction from '../../shared/components/detail/DetailTransaction';
 import TodayResult from '../../shared/components/detail/TodayResult';
 import Header from '../../shared/components/header/Header';
-import {
-  getDailyReport,
-  type DailyReportData,
-  type DailyReportRequest,
-} from '../../shared/apis/report/reportApi';
 
 const NO_RECORD_MESSAGE = '작성기록이 없습니다.';
 
@@ -36,6 +37,10 @@ const DEFAULT_DAILY_REPORT_DATA: DailyReportData = {
   },
   todayAdvice: [NO_RECORD_MESSAGE],
 };
+
+interface DailyLocationState {
+  prefetchedDailyReportData?: DailyReportData | null;
+}
 
 const getTodayDateParts = (): { apiDate: string; displayDate: string } => {
   const today = new Date();
@@ -83,8 +88,12 @@ const normalizeDailyReportData = (data?: DailyReportData | null): DailyReportDat
 };
 
 const Daily = () => {
+  const location = useLocation();
+  const locationState = location.state as DailyLocationState | null;
   const [{ apiDate, displayDate }] = useState(getTodayDateParts);
-  const [dailyReportData, setDailyReportData] = useState<DailyReportData>(DEFAULT_DAILY_REPORT_DATA);
+  const [dailyReportData, setDailyReportData] = useState<DailyReportData>(() =>
+    normalizeDailyReportData(locationState?.prefetchedDailyReportData)
+  );
 
   useEffect(() => {
     const fetchDailyReport = async () => {
@@ -96,19 +105,24 @@ const Daily = () => {
         const response = await getDailyReport(requestBody);
 
         if (!response.success) {
-          setDailyReportData(DEFAULT_DAILY_REPORT_DATA);
+          if (!locationState?.prefetchedDailyReportData) {
+            setDailyReportData(DEFAULT_DAILY_REPORT_DATA);
+          }
           return;
         }
 
         setDailyReportData(normalizeDailyReportData(response.data));
       } catch (error) {
         console.error('데일리 리포트 조회에 실패했습니다.', error);
-        setDailyReportData(DEFAULT_DAILY_REPORT_DATA);
+
+        if (!locationState?.prefetchedDailyReportData) {
+          setDailyReportData(DEFAULT_DAILY_REPORT_DATA);
+        }
       }
     };
 
     void fetchDailyReport();
-  }, [apiDate]);
+  }, [apiDate, locationState?.prefetchedDailyReportData]);
 
   return (
     <main className="min-h-screen w-full bg-[#F8F9FA] pb-10">
