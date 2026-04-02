@@ -2,10 +2,10 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer } fro
 import graph from '@assets/statistics/graph.svg';
 
 const data = [
-  { name: '7월', yield: -15 },
-  { name: '8월', yield: 10 },
-  { name: '9월', yield: -5 },
-  { name: '현재', yield: 20 },
+  { month: 7, profitRate: -15 },
+  { month: 8, profitRate: 10 },
+  { month: 9, profitRate: -5 },
+  { month: 10, profitRate: 20 },
 ];
 
 const YieldTrend = () => {

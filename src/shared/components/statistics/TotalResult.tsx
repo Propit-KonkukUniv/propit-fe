@@ -22,7 +22,7 @@ const TotalResult = () => {
           <p className="text-[16px] font-bold">68%</p>
         </div>
         <div className="col-span-1 rounded-lg border border-[#667EEA] bg-[#667EEA]/5 p-4">
-          <p className="text-[12px] font-medium text-[#667EEA]">오늘의 손익</p>
+          <p className="text-[12px] font-medium text-[#667EEA]">전체 손익</p>
           <p className="text-[16px] font-bold text-[#667EEA]">+3,500,000원</p>
         </div>
         <div className="rounded-lg bg-[#F9FAFB] p-4">

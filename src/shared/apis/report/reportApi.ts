@@ -64,19 +64,19 @@ export interface EmotionSummary {
 }
 
 export interface OverviewSummary {
-  totalTradeCount: number;
-  winRate: number;
-  totalProfit: number;
-  avgProfitRate: number;
-  bestTrade: TradeRecord;
-  worstTrade: TradeRecord;
-  emotionSummary: EmotionSummary;
-  averageHoldingDays: number;
+  totalTradeCount: number; // 총 거래 횟수
+  winRate: number; // 승률
+  totalProfit: number; // 전체 손익
+  avgProfitRate: number; // 평균 수익률
+  bestTrade: TradeRecord; // 최고의 거래
+  worstTrade: TradeRecord; // 최악의 거래
+  emotionSummary: EmotionSummary; // 가장 많았던 감정
+  averageHoldingDays: number; // 평균 보유 기간
 }
 
 export interface ProfitRateTrend {
-  month: number;
-  profitRate: number;
+  month: number; // 월
+  profitRate: number; // 해당 월의 수익률
 }
 
 export interface AiAnalysisDetail {
