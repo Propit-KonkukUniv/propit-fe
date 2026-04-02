@@ -34,7 +34,50 @@ export default function Login() {
       const data = await userLoginApi({ email, password });
       console.log('로그인 성공:', data);
 
-      // TODO: accessToken 저장/전역 상태 연동 필요 시 여기서 처리
+      // userLoginApi 내부에서도 토큰을 저장하지만,
+      // 백엔드 응답 필드명이 케이스별로 달라 토큰이 안 들어갈 수 있어 방어합니다.
+      const getString = (v: unknown): string | null =>
+        typeof v === 'string' && v.trim().length > 0 ? v : null;
+
+      const extractToken = (payload: unknown): string | null => {
+        if (!payload || typeof payload !== 'object') return null;
+        const o = payload as Record<string, unknown>;
+
+        const pickFrom = (obj: Record<string, unknown> | undefined | null): string | null => {
+          if (!obj) return null;
+          return (
+            getString(obj.accessToken) ||
+            getString(obj.access_token) ||
+            getString(obj.token) ||
+            getString(obj.jwt) ||
+            getString(obj.jwtToken) ||
+            null
+          );
+        };
+
+        // 1차: root / data / data.data
+        return (
+          pickFrom(o) ||
+          pickFrom(o.data as Record<string, unknown> | undefined) ||
+          pickFrom(
+            (o.data as Record<string, unknown> | undefined)?.data as Record<string, unknown> | undefined
+          ) ||
+          null
+        );
+      };
+
+      const storedToken = localStorage.getItem('accessToken');
+      if (!storedToken) {
+        const fallback = extractToken(data);
+        if (fallback) localStorage.setItem('accessToken', fallback);
+      }
+
+      const finalToken = localStorage.getItem('accessToken');
+      if (!finalToken) {
+        alert('로그인 응답에 토큰이 없어 홈으로 이동할 수 없습니다. (백엔드 응답 필드 확인 필요)');
+        return;
+      }
+
       navigate('/home');
     } catch (err) {
       console.error('로그인 실패:', err);

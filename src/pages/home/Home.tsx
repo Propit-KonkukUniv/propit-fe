@@ -1,5 +1,6 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Header from '@components/header/Header';
 import Box from '@components/box/Box';
@@ -18,6 +19,7 @@ import Greeting from '@shared/components/home/Greeting';
 
 import historyIcon from '@assets/home/history.svg';
 import { getHomeApi, type HomePayload } from '@shared/apis/home/homeApi';
+import { userMeApi } from '@shared/apis/user/userApi';
 
 const ROUTINE_ITEMS = ['심사숙고', '단타 절대 금지X', '분할매수하기!!'];
 
@@ -38,24 +40,79 @@ const HISTORY_LEFT_ICON = <img src={historyIcon} alt="" className="h-5 w-5" aria
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const d = new Date();
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const todayLabel = `${d.getMonth() + 1}월 ${d.getDate()}일 ${weekdays[d.getDay()]}요일`;
 
   const [homeData, setHomeData] = useState<HomePayload | null>(null);
+  const [homeError, setHomeError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchHome = async () => {
+      const rawToken = localStorage.getItem('accessToken');
+      if (!rawToken) {
+        setHomeError('로그인이 필요합니다.');
+        window.location.href = '/login';
+        return;
+      }
+
       try {
         const data = await getHomeApi();
         setHomeData(data);
+        setHomeError(null);
       } catch (err) {
+        if (err instanceof Error && err.message === 'TOKEN_EXPIRED') {
+          window.location.href = '/login';
+          return;
+        }
+        if (axios.isAxiosError(err)) {
+          const status = err.response?.status;
+          if (status === 401) {
+            // 토큰이 유효하지 않은 경우에만 로그인으로 유도
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = '/login';
+            return;
+          }
+          if (status === 403) {
+            // 토큰은 있는데 /home만 403이면, 백엔드 권한(ROLE/스코프) 설정 문제일 수 있음
+            try {
+              const me = await userMeApi();
+              // /users/me가 성공하면 토큰은 유효 → /home 권한 이슈 가능성이 큼
+              if (me) {
+                setHomeError('접근 권한이 없습니다. (/home 권한 설정을 백엔드에서 확인해주세요)');
+                return;
+              }
+            } catch {
+              // /users/me도 실패하면 토큰 자체가 유효하지 않을 가능성이 큼 → 재로그인 유도
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              window.location.href = '/login';
+              return;
+            }
+
+            setHomeError('접근 권한이 없습니다.');
+            return;
+          }
+        }
+
+        setHomeError('홈 데이터 조회에 실패했습니다.');
         console.error('홈 데이터 조회 실패:', err);
       }
     };
     fetchHome();
-  }, []);
+
+    // 기록 직후 DB 반영이 약간 지연되는 경우를 대비해 한 번 더 짧게 재조회합니다.
+    const state = location.state as { fromWrite?: boolean } | null | undefined;
+    if (state?.fromWrite) {
+      const t = window.setTimeout(() => {
+        fetchHome();
+      }, 800);
+      return () => window.clearTimeout(t);
+    }
+  }, [location.state]);
 
   // 1. 누적 리포트 데이터 처리 (응답 2번째 케이스 대응)
   const cumulativeFromApi: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
@@ -78,6 +135,12 @@ const Home = () => {
 
       <div className="flex flex-col gap-5 px-5 pt-6">
         <Greeting />
+
+        {homeError ? (
+          <div className="rounded-xl bg-white p-4 text-sm text-gray-600">
+            {homeError}
+          </div>
+        ) : null}
 
         {/* 2. 오늘 기록 여부에 따른 카드 표시 (응답 1, 3번째 케이스 대응) */}
         <Box>

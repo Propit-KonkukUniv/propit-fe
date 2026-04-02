@@ -144,7 +144,9 @@ const Write = () => {
         return;
       }
 
-      navigate('/daily');
+      // 기록 직후 홈으로 돌아가면 `getHomeApi()`가 다시 호출되며
+      // 오늘의 기분/누적 리포트 카드가 즉시 반영됩니다.
+      navigate('/home', { state: { fromWrite: true } });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =

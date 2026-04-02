@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { type AxiosRequestHeaders } from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -20,27 +20,28 @@ api.interceptors.request.use((config) => {
     return config;
   }
 
-  let token = localStorage.getItem('accessToken');
-    
-  if (token) {
-    // 1. JSON.stringify로 저장되어 따옴표가 붙은 경우를 대비해 안전하게 파싱합니다.
-    const cleanToken = token.startsWith('"') ? JSON.parse(token) : token;
-    
-    // 2. 헤더 객체가 존재하는지 확인 후 토큰 주입 (공백 한 칸 확인 필수)
-    if (config.headers) {
-      config.headers.Authorization = `Bearer ${cleanToken.trim()}`;
+  const rawToken = localStorage.getItem('accessToken');
+  if (rawToken) {
+    // localStorage에 stringified 된 토큰/따옴표가 섞인 케이스를 방어
+    let token = rawToken;
+    try {
+      if (token.startsWith('"') && token.endsWith('"')) token = JSON.parse(token);
+    } catch {
+      // JSON.parse 실패해도 token은 그대로 사용
+    }
+    token = token.replace(/^["']|["']$/g, '').trim();
+    // 토큰 값 자체에 'Bearer ' 접두사가 이미 포함된 경우를 방어
+    token = token.replace(/^Bearer\s+/i, '').trim();
+
+    if (token) {
+      // headers가 undefined일 수 있으니 방어
+      if (!config.headers) {
+        config.headers = { Authorization: `Bearer ${token}` } as AxiosRequestHeaders;
+      } else {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
     }
   }
-  
-  console.log("현재 요청 URL:", config.url);
-  console.log("가져온 토큰:", token);
-
-  if (token) {
-    // 토큰 양끝에 있는 쌍따옴표나 홑따옴표를 제거합니다.
-    token = token.replace(/^["']|["']$/g, '');
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
   return config;
 });
 
@@ -55,12 +56,12 @@ api.interceptors.response.use(
       const { status } = error.response;
 
       if (status === 401) {
-        console.error('인증 토큰이 만료되었거나 유효하지 않습니다.');
+        // 401은 각 페이지에서 catch 후 처리(예: /login 리다이렉트)하도록 로그만 최소화
         // TODO: 필요시 로컬 스토리지 삭제 및 로그인 페이지로 리다이렉트
         // localStorage.removeItem('accessToken');
         // window.location.href = '/login';
       } else if (status === 403) {
-        console.error('접근 권한이 없습니다.');
+        // 403은 프론트에서 필요한 경우 처리하므로 여기서는 로그만 생략
       } else if (status >= 500) {
         console.error('서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.');
       }

@@ -22,12 +22,41 @@ export async function userLoginApi(body: UserLoginRequest) {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
 
-  if (responseData.success && responseData.data?.accessToken) {
-    localStorage.setItem('accessToken', responseData.data.accessToken);
+  const pickToken = (v: unknown): string | null =>
+    typeof v === 'string' && v.trim().length > 0 ? v : null;
 
-    if (responseData.data.refreshToken) {
-      localStorage.setItem('refreshToken', responseData.data.refreshToken);
-    }
+  const normalizeToken = (v: string): string => v.replace(/^Bearer\s+/i, '').replace(/^["']|["']$/g, '').trim();
+
+  // 1) 응답 헤더 Authorization 에 토큰이 내려오는 케이스 지원
+  const headerAuth = pickToken((res.headers as Record<string, unknown> | undefined)?.authorization);
+  const headerToken = headerAuth ? normalizeToken(headerAuth) : null;
+
+  // 백엔드 응답 필드명이 아직 확정이 아니라서 여러 케이스를 같이 지원합니다.
+  // - { success, data: { accessToken } }
+  // - { success, data: { access_token } }
+  // - { accessToken } / { token } 등
+  const accessToken = headerToken ||
+    pickToken(responseData?.data?.accessToken) ||
+    pickToken(responseData?.data?.access_token) ||
+    pickToken(responseData?.data?.token) ||
+    pickToken(responseData?.data?.jwt) ||
+    pickToken(responseData?.accessToken) ||
+    pickToken(responseData?.access_token) ||
+    pickToken(responseData?.token) ||
+    pickToken(responseData?.jwt);
+
+  if (accessToken) {
+    localStorage.setItem('accessToken', normalizeToken(accessToken));
+  }
+
+  const refreshToken =
+    pickToken(responseData?.data?.refreshToken) ||
+    pickToken(responseData?.data?.refresh_token) ||
+    pickToken(responseData?.refreshToken) ||
+    pickToken(responseData?.refresh_token);
+
+  if (refreshToken) {
+    localStorage.setItem('refreshToken', normalizeToken(refreshToken));
   }
 
   return responseData;
