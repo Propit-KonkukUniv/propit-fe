@@ -15,34 +15,36 @@ export interface BaseResponse<T> {
 // ==========================================
 
 export interface DailyReportRequest {
-  date: string; // 예: "2025-12-07"
+  date: string; // 예: "2025-12-07" 형태의 오늘날짜를 전송한다.
 }
 
 export interface DailySummary {
-  tradeCount: number;
-  winRate: number;
-  totalProfit: number;
-  averageProfitRate: number;
+  tradeCount: number; // 거래횟수
+  winRate: number; // 승률
+  totalProfit: number; // 오늘의 손익
+  averageProfitRate: number; // 평균 수익률
 }
 
 export interface EmotionAnalysis {
-  emotion: string;
-  count: number;
-  analysis: string;
+  // 감정 분석
+  emotion: string; // 감정
+  count: number; // 횟수
+  analysis: string; // 분석 내용
 }
 
 export interface AiInsight {
-  strengthPattern: string;
-  improvementPoint: string;
-  cautionTime: string;
+  // AI 인사이트
+  strengthPattern: string; // 강정 패턴
+  improvementPoint: string; // 개선 포인트
+  cautionTime: string; // 주의 사항
 }
 
 export interface DailyReportData {
-  date: string;
-  summary: DailySummary;
-  emotionAnalysis: EmotionAnalysis[];
-  aiInsight: AiInsight;
-  todayAdvice: string[];
+  date: string; // 오늘 날짜
+  summary: DailySummary; //
+  emotionAnalysis: EmotionAnalysis[]; // 감정 분석 결과 배열
+  aiInsight: AiInsight; // AI 인사이트
+  todayAdvice: string[]; // 오늘의 조언
 }
 
 // ==========================================
