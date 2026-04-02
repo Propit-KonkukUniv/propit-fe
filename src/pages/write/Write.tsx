@@ -1,11 +1,20 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {
+  getDailyReport,
+  type DailyReportData,
+  type DailyReportRequest,
+} from '../../shared/apis/report/reportApi';
+import { createTradeLog, type TradeLogRequest } from '../../shared/apis/tradelog/tradelogApi';
 import Box from '../../shared/components/box/Box';
 import Header from '../../shared/components/header/Header';
 import ConfirmModal from '../../shared/components/modal/ConfirmModal';
 import WriteForm from '../../shared/components/write/WriteForm';
-import { createTradeLog, type TradeLogRequest } from '../../shared/apis/tradelog/tradelogApi';
+
+const MIN_REPORT_LOADING_MS = 1200;
+const DAILY_REPORT_RETRY_COUNT = 3;
+const DAILY_REPORT_RETRY_DELAY_MS = 900;
 
 const INITIAL_TRADE_LOG_REQUEST: TradeLogRequest = {
   sellDate: '',
@@ -17,6 +26,20 @@ const INITIAL_TRADE_LOG_REQUEST: TradeLogRequest = {
   holdingDays: 0,
   reason: '',
   emotionTags: [],
+};
+
+const wait = (milliseconds: number): Promise<void> =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, milliseconds);
+  });
+
+const getTodayApiDate = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 };
 
 const parseEmotionTags = (value: string): string[] => {
@@ -46,6 +69,28 @@ const getDateError = (buyDate: string, sellDate: string): string => {
   return getHoldingDays(buyDate, sellDate) < 0
     ? '매수일은 매도일보다 늦을 수 없습니다.'
     : '';
+};
+
+const fetchDailyReportBeforeNavigate = async (date: string): Promise<DailyReportData | null> => {
+  const requestBody: DailyReportRequest = { date };
+
+  for (let attempt = 0; attempt < DAILY_REPORT_RETRY_COUNT; attempt += 1) {
+    try {
+      const response = await getDailyReport(requestBody);
+
+      if (response.success) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error('데일리 리포트 선조회에 실패했습니다.', error);
+    }
+
+    if (attempt < DAILY_REPORT_RETRY_COUNT - 1) {
+      await wait(DAILY_REPORT_RETRY_DELAY_MS);
+    }
+  }
+
+  return null;
 };
 
 const Write = () => {
@@ -128,6 +173,8 @@ const Write = () => {
   };
 
   const handleConfirmSave = async () => {
+    const submitStartedAt = Date.now();
+
     setIsConfirmModalOpen(false);
     setIsSubmitting(true);
 
@@ -144,9 +191,19 @@ const Write = () => {
         return;
       }
 
-      // 기록 직후 홈으로 돌아가면 `getHomeApi()`가 다시 호출되며
-      // 오늘의 기분/누적 리포트 카드가 즉시 반영됩니다.
-      navigate('/home', { state: { fromWrite: true } });
+      const prefetchedDailyReportData = await fetchDailyReportBeforeNavigate(getTodayApiDate());
+      const elapsedTime = Date.now() - submitStartedAt;
+      const remainingDelay = Math.max(0, MIN_REPORT_LOADING_MS - elapsedTime);
+
+      if (remainingDelay > 0) {
+        await wait(remainingDelay);
+      }
+
+      navigate('/daily', {
+        state: {
+          prefetchedDailyReportData,
+        },
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
@@ -190,7 +247,7 @@ const Write = () => {
             disabled={isSubmitting}
             className="mt-2 h-[60px] w-full rounded-[12px] bg-[#646BFA] text-[18px] font-bold text-white shadow-lg transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-[#B8BCFF] disabled:shadow-none"
           >
-            {isSubmitting ? '저장 중...' : '저장하기'}
+            {isSubmitting ? '리포트 준비 중...' : '저장하기'}
           </button>
         </div>
       </main>
@@ -202,6 +259,20 @@ const Write = () => {
         onConfirm={handleConfirmSave}
         onCancel={() => setIsConfirmModalOpen(false)}
       />
+
+      {isSubmitting && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-[#F8F9FA]/80 px-5 backdrop-blur-sm">
+          <div className="flex w-full max-w-[320px] flex-col items-center gap-4 rounded-[20px] bg-white px-6 py-8 text-center shadow-xl">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#DCE0FF] border-t-[#646BFA]" />
+            <div className="flex flex-col gap-1">
+              <p className="text-[16px] font-bold text-gray-900">데일리 리포트를 준비하고 있어요</p>
+              <p className="text-[13px] leading-relaxed text-gray-500">
+                최신 분석을 받아온 뒤 오늘의 거래 리포트로 이동할게요.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
