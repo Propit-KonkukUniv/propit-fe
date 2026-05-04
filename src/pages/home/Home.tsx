@@ -12,7 +12,9 @@ import WritePromptCard from '@shared/components/home/WritePromptCard';
 import RoutineCard from '@shared/components/home/RoutineCard';
 import Top3Card, { type Top3Item } from '@shared/components/home/Top3Card';
 import BadgeCard from '@shared/components/home/BadgeCard';
-import CumulativeReportCard, { type CumulativeStatItem } from '@shared/components/home/CumulativeReportCard';
+import CumulativeReportCard, {
+  type CumulativeStatItem,
+} from '@shared/components/home/CumulativeReportCard';
 import LinkCard from '@shared/components/home/LinkCard';
 import Greeting from '@shared/components/home/Greeting';
 
@@ -27,12 +29,13 @@ const TOP3: Top3Item[] = [
   { name: '엔비디아', pct: '-0.5%', color: 'text-[#2563EB]' },
 ];
 
-const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] = [
-  { label: '총 거래 횟수', value: '152회' },
-  { label: '승률', value: '68%' },
-  { label: '누적 손익', value: '+3,500,000원', variant: 'primary' },
-  { label: '평균 수익률', value: '+24.5%' },
-];
+const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
+  [
+    { label: '총 거래 횟수', value: '152회' },
+    { label: '승률', value: '68%' },
+    { label: '누적 손익', value: '+3,500,000원', variant: 'primary' },
+    { label: '평균 수익률', value: '+24.5%' },
+  ];
 
 const HISTORY_LEFT_ICON = <img src={historyIcon} alt="" className="h-5 w-5" aria-hidden="true" />;
 
@@ -57,17 +60,28 @@ const Home = () => {
     fetchHome();
   }, []);
 
-  const cumulativeFromApi: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
+  const cumulativeFromApi: [
+    CumulativeStatItem,
+    CumulativeStatItem,
+    CumulativeStatItem,
+    CumulativeStatItem,
+  ] =
     homeData?.cumulativeReport.exists && homeData.cumulativeReport.data
       ? [
           { label: '총 거래 횟수', value: `${homeData.cumulativeReport.data.totalTradeCount}회` },
-          { label: '승률', value: `${homeData.cumulativeReport.data.winRate}%` },
+          {
+            label: '수익실현 비율',
+            value: `${Number(homeData.cumulativeReport.data.winRate).toFixed(1)}%`,
+          },
           {
             label: '누적 손익',
             value: `${homeData.cumulativeReport.data.totalProfit.toLocaleString()}원`,
             variant: 'primary',
           },
-          { label: '평균 수익률', value: `${homeData.cumulativeReport.data.avgReturnRate}%` },
+          {
+            label: '평균 수익률',
+            value: `${Number(homeData.cumulativeReport.data.avgReturnRate).toFixed(2)}%`,
+          },
         ]
       : CUMULATIVE;
 
@@ -108,10 +122,7 @@ const Home = () => {
             className="flex w-full items-center justify-between p-5 text-left"
             onClick={() => navigate('/daily')}
           >
-            <LinkCard
-              label="이전 매매 보러가기"
-              leftIcon={HISTORY_LEFT_ICON}
-            />
+            <LinkCard label="이전 매매 보러가기" leftIcon={HISTORY_LEFT_ICON} />
           </button>
         </Box>
       </div>
