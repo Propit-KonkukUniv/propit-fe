@@ -6,7 +6,11 @@ import {
   type DailyReportData,
   type DailyReportRequest,
 } from '../../shared/apis/report/reportApi';
-import { createTradeLog, type TradeLogRequest } from '../../shared/apis/tradelog/tradelogApi';
+import {
+  createTradeLog,
+  analyzeOcr, //  OCR API 함수 Import 추가
+  type TradeLogRequest,
+} from '../../shared/apis/tradelog/tradelogApi';
 import Box from '../../shared/components/box/Box';
 import Header from '../../shared/components/header/Header';
 import ConfirmModal from '../../shared/components/modal/ConfirmModal';
@@ -99,7 +103,11 @@ const Write = () => {
   const [buyDate, setBuyDate] = useState('');
   const [emotionTagInput, setEmotionTagInput] = useState('');
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  // 저장용 로딩 상태
   const [isSubmitting, setIsSubmitting] = useState(false);
+  //  OCR 이미지 분석용 로딩 상태
+  const [isOcrUploading, setIsOcrUploading] = useState(false);
 
   const holdingDays = Math.max(0, getHoldingDays(buyDate, tradeLogRequest.sellDate));
   const dateError = getDateError(buyDate, tradeLogRequest.sellDate);
@@ -117,6 +125,56 @@ const Write = () => {
   const handleEmotionTagInputChange = (value: string) => {
     setEmotionTagInput(value);
     handleTradeLogRequestChange('emotionTags', parseEmotionTags(value));
+  };
+
+  //  OCR 이미지 업로드 핸들러
+  const handleImageUpload = async (file: File) => {
+    console.log('[Write.tsx] 선택된 파일 정보:', {
+      이름: file.name,
+      타입: file.type,
+      사이즈: `${(file.size / 1024).toFixed(2)} KB`,
+    });
+    setIsOcrUploading(true);
+    try {
+      const response = await analyzeOcr(file);
+
+      if (response.success && response.data) {
+        const {
+          sellDate,
+          stockName,
+          sectorName,
+          buyPrice,
+          sellPrice,
+          quantity,
+          buyDate: parsedBuyDate,
+        } = response.data;
+
+        // API가 파싱에 성공한 값(null이 아닌 값)들만 골라서 폼에 자동 반영
+        if (sellDate) handleTradeLogRequestChange('sellDate', sellDate);
+        if (stockName) handleTradeLogRequestChange('stockName', stockName);
+        if (sectorName) handleTradeLogRequestChange('sectorName', sectorName);
+        if (buyPrice !== null) handleTradeLogRequestChange('buyPrice', buyPrice);
+        if (sellPrice !== null) handleTradeLogRequestChange('sellPrice', sellPrice);
+        if (quantity !== null) handleTradeLogRequestChange('quantity', quantity);
+
+        // 매수일은 UI 구조상 별도 state(buyDate)로 관리되므로 따로 업데이트
+        if (parsedBuyDate) setBuyDate(parsedBuyDate);
+      } else {
+        alert(response.message || 'OCR 분석에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('OCR 파싱 중 에러:', error);
+      if (axios.isAxiosError(error)) {
+        const message =
+          (error.response?.data as { message?: string } | undefined)?.message ??
+          '이미지 분석 중 오류가 발생했습니다.';
+        alert(message);
+      } else {
+        alert('네트워크 또는 서버 에러로 OCR 분석에 실패했습니다.');
+      }
+    } finally {
+      setIsOcrUploading(false); // 분석 종료 후 스피너 끄기
+    }
   };
 
   const validateTradeLogRequest = (): boolean => {
@@ -198,7 +256,7 @@ const Write = () => {
         await wait(remainingDelay);
       }
 
-      navigate('/daily', {
+      navigate('/home', {
         state: {
           prefetchedDailyReportData,
         },
@@ -239,13 +297,16 @@ const Write = () => {
               onTradeLogRequestChange={handleTradeLogRequestChange}
               onBuyDateChange={setBuyDate}
               onEmotionTagInputChange={handleEmotionTagInputChange}
+              //  새로 만든 OCR 프롭스 전달!
+              onImageUpload={handleImageUpload}
+              isUploading={isOcrUploading}
             />
           </Box>
 
           <button
             type="button"
             onClick={handleSaveClick}
-            disabled={isSubmitting}
+            disabled={isSubmitting || isOcrUploading} // 분석 중일 때 저장 버튼 비활성화
             className="mt-2 h-[60px] w-full rounded-[12px] bg-[#646BFA] text-[18px] font-bold text-white shadow-lg transition-transform active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-[#B8BCFF] disabled:shadow-none"
           >
             {isSubmitting ? '리포트 준비 중...' : '저장하기'}
@@ -266,9 +327,9 @@ const Write = () => {
           <div className="flex w-full max-w-[320px] flex-col items-center gap-4 rounded-[20px] bg-white px-6 py-8 text-center shadow-xl">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#DCE0FF] border-t-[#646BFA]" />
             <div className="flex flex-col gap-1">
-              <p className="text-[16px] font-bold text-gray-900">데일리 리포트를 준비하고 있어요</p>
+              <p className="text-[16px] font-bold text-gray-900">매매기록을 생성 중입니다.</p>
               <p className="text-[13px] leading-relaxed text-gray-500">
-                최신 분석을 받아온 뒤 오늘의 거래 리포트로 이동할게요.
+                매매기록 생성이 완료되면 홈화면으로 이동할게요.
               </p>
             </div>
           </div>

@@ -41,6 +41,46 @@ export interface GetTradeLogDetailResponse extends BaseResponse {
   data: TradeLogRequest;
 }
 
+// 3. OCR API 관련 타입 및 함수 (추가)
+// ==========================================
+
+export interface OcrResponseData {
+  sellDate: string | null;
+  stockName: string | null;
+  sectorName: string | null;
+  buyPrice: number | null;
+  sellPrice: number | null;
+  quantity: number | null;
+  buyDate: string | null;
+  imageUrls: string[];
+}
+
+export interface OcrResponse extends BaseResponse {
+  data: OcrResponseData;
+}
+
+// OCR 이미지 파싱 (POST)
+export const analyzeOcr = async (file: File): Promise<OcrResponse> => {
+  const formData = new FormData();
+  // API 명세서에 필드명이 'files' 로 되어있음!
+  formData.append('files', file);
+  // ==========================================
+  //  [DEBUG] 백엔드로 쏘기 전 데이터 확인
+  // ==========================================
+  console.log('--- [OCR API 요청 전 디버깅] ---');
+  console.log('1. 파일 원본:', file);
+  console.log('2. FormData에 담긴 파일:', formData.get('files'));
+  console.log('3. 현재 로컬스토리지 토큰:', localStorage.getItem('accessToken'));
+  console.log('--------------------------------');
+  const response = await api.post('/tradelogs/ocr', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  return response.data;
+};
+
 // ==========================================
 // 2. API 함수 구현부
 // ==========================================
