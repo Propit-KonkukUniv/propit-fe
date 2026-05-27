@@ -89,13 +89,6 @@ const Nav = ({ isOpen, onClose }: NavProps) => {
               누적 리포트
             </button>
           </div>
-
-          {/* MY 카테고리 */}
-          <div className="flex flex-col gap-4">
-            <span className="text-[18px] font-bold text-black"></span>
-            <button className="text-left transition-colors hover:text-[#646BFA]"></button>
-            <button className="text-left transition-colors hover:text-[#646BFA]"></button>
-          </div>
         </div>
 
         {/* 로그아웃 (flex-col과 mt-auto를 써서 맨 아래로 밀어냄) */}
