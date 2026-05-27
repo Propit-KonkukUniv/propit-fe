@@ -32,7 +32,7 @@ const TOP3: Top3Item[] = [
 const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
   [
     { label: '총 거래 횟수', value: '152회' },
-    { label: '승률', value: '68%' },
+    { label: '수익실현 비율', value: '68%' },
     { label: '누적 손익', value: '+3,500,000원', variant: 'primary' },
     { label: '평균 수익률', value: '+24.5%' },
   ];

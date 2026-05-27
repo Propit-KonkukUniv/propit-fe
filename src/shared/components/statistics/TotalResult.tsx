@@ -84,7 +84,7 @@ const TotalResult = ({ summary }: TotalResultProps) => {
           <p className="text-[16px] font-bold">{summary.totalTradeCount}회</p>
         </div>
         <div className="rounded-lg bg-[#F9FAFB] p-4">
-          <p className="text-[12px] text-gray-500">승률</p>
+          <p className="text-[12px] text-gray-500">수익실현 비율</p>
           <p className="text-[16px] font-bold">{formatRate(summary.winRate)}%</p>
         </div>
         <div className="col-span-1 rounded-lg border border-[#667EEA] bg-[#667EEA]/5 p-4">

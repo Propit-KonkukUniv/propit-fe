@@ -24,7 +24,7 @@ const TodayResult = ({ tradeCount, winRate, totalProfit, averageProfitRate }: To
           <p className="text-[12px] font-[700]">{tradeCount}회</p>
         </div>
         <div className="rounded-lg bg-[#F9FAFB] p-4">
-          <p className="text-[10px] font-[400] text-black">승률</p>
+          <p className="text-[10px] font-[400] text-black">수익실현 비율</p>
           <p className="text-[12px] font-[700]">{formatRate(Math.round(winRate))}</p>
         </div>
         <div className="rounded-lg border border-[#667EEA] bg-[#667EEA]/5 p-4">
