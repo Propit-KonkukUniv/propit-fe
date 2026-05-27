@@ -13,16 +13,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
+      # 1. Node 22 먼저 설치
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: 22
+
+      # 2. pnpm 설치
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 8
+          run_install: false
+
+      # 3. pnpm 캐시 설정
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
           cache: 'pnpm'
 
+      # 4. 의존성 설치
       - name: Install dependencies
         run: pnpm install
 
+      # 5. Prettier 검사
       - name: Run Prettier
-        run: pnpm prettier --check
+        run: pnpm exec prettier --check .
