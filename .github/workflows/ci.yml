@@ -22,7 +22,7 @@ jobs:
       # 의존성 캐싱
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install deps
