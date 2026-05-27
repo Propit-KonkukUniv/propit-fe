@@ -9,7 +9,7 @@ import Box from '../../shared/components/box/Box';
 import Advice from '../../shared/components/detail/Advice';
 import Ai from '../../shared/components/detail/Ai';
 import Analysis from '../../shared/components/detail/Analysis';
-import DetailTransaction from '../../shared/components/detail/DetailTransaction';
+//import DetailTransaction from '../../shared/components/detail/DetailTransaction';
 import TodayResult from '../../shared/components/detail/TodayResult';
 import Header from '../../shared/components/header/Header';
 
@@ -135,9 +135,11 @@ const Daily = () => {
         <Box>
           <TodayResult {...dailyReportData.summary} />
         </Box>
-        <Box>
-          <DetailTransaction />
-        </Box>
+        {/*
+          <Box>
+            <DetailTransaction />
+          </Box>
+        */}
         <Box>
           <Analysis emotionAnalysis={dailyReportData.emotionAnalysis} />
         </Box>

@@ -58,6 +58,7 @@ const Nav = ({ isOpen, onClose }: NavProps) => {
         <div className="flex flex-col gap-8 text-[15px] text-gray-800">
           {/* 기본 메뉴 */}
           <div className="flex flex-col gap-4">
+            <span className="text-[18px] font-bold text-black">Propit</span>
             <button
               className="text-left font-medium transition-colors hover:text-[#646BFA]"
               onClick={() => handleNavigate('/home')}
@@ -91,13 +92,9 @@ const Nav = ({ isOpen, onClose }: NavProps) => {
 
           {/* MY 카테고리 */}
           <div className="flex flex-col gap-4">
-            <span className="text-[18px] font-bold text-black">MY</span>
-            <button className="text-left transition-colors hover:text-[#646BFA]">
-              이전 일지 보기
-            </button>
-            <button className="text-left transition-colors hover:text-[#646BFA]">
-              루틴 등록하기
-            </button>
+            <span className="text-[18px] font-bold text-black"></span>
+            <button className="text-left transition-colors hover:text-[#646BFA]"></button>
+            <button className="text-left transition-colors hover:text-[#646BFA]"></button>
           </div>
         </div>
 

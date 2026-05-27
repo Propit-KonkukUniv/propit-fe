@@ -123,7 +123,7 @@ const WriteForm = ({
           type="text"
           value={tradeLogRequest.stockName}
           onChange={(event) => onTradeLogRequestChange('stockName', event.target.value)}
-          placeholder="예: Tesla"
+          placeholder="예: 삼성증권"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
         />
       </div>
@@ -137,7 +137,7 @@ const WriteForm = ({
           type="text"
           value={tradeLogRequest.sectorName}
           onChange={(event) => onTradeLogRequestChange('sectorName', event.target.value)}
-          placeholder="예: IT"
+          placeholder="예: 증권"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
         />
       </div>
@@ -201,7 +201,7 @@ const WriteForm = ({
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <img src={calendertimer} alt="holding period" className="w-5" />
-          <span className="text-[14px] font-bold">보유 기간</span>
+          <span className="text-[14px] font-bold">매수일</span>
         </div>
         <input
           type="date"

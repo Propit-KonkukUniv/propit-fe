@@ -21,7 +21,11 @@ import Greeting from '@shared/components/home/Greeting';
 import historyIcon from '@assets/home/history.svg';
 import { getHomeApi, type HomePayload } from '@shared/apis/home/homeApi';
 
-const ROUTINE_ITEMS = ['심사숙고', '단타 절대 금지X', '분할매수하기!!'];
+const ROUTINE_ITEMS = [
+  '분산투자로 리스크를 관리하라',
+  '장기적인 관점으로 오래하라',
+  '자신이 잘 이해하는 곳에만 투자하라',
+];
 
 const TOP3: Top3Item[] = [
   { name: '트레저 글로벌', pct: '+276.8%', color: 'text-[#E11D48]' },
