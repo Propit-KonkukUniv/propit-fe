@@ -13,7 +13,10 @@ const Advice = ({ todayAdvice }: AdviceProps) => {
       </div>
       <ul className="flex flex-col gap-3">
         {todayAdvice.map((text, index) => (
-          <li key={`${text}-${index}`} className="flex items-start gap-2 text-[12px] font-[400] text-black">
+          <li
+            key={`${text}-${index}`}
+            className="flex items-start gap-2 text-[12px] font-[400] text-black"
+          >
             <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-black" />
             {text}
           </li>

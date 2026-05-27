@@ -39,14 +39,16 @@ const CumulativeReportCard = ({ items, onMore }: CumulativeReportCardProps) => {
             >
               <p
                 className={
-                  isPrimary
-                    ? 'text-[12px] font-medium text-[#667EEA]'
-                    : 'text-[12px] text-gray-500'
+                  isPrimary ? 'text-[12px] font-medium text-[#667EEA]' : 'text-[12px] text-gray-500'
                 }
               >
                 {item.label}
               </p>
-              <p className={isPrimary ? 'text-[16px] font-bold text-[#667EEA]' : 'text-[16px] font-bold'}>
+              <p
+                className={
+                  isPrimary ? 'text-[16px] font-bold text-[#667EEA]' : 'text-[16px] font-bold'
+                }
+              >
                 {item.value}
               </p>
             </div>
@@ -58,4 +60,3 @@ const CumulativeReportCard = ({ items, onMore }: CumulativeReportCardProps) => {
 };
 
 export default CumulativeReportCard;
-

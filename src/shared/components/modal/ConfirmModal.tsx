@@ -8,13 +8,7 @@ interface ConfirmModalProps {
   onCancel: () => void;
 }
 
-const ConfirmModal = ({
-  isOpen,
-  title,
-  message,
-  onConfirm,
-  onCancel,
-}: ConfirmModalProps) => {
+const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }: ConfirmModalProps) => {
   const titleId = useId();
   const descriptionId = useId();
   const confirmButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -60,7 +54,10 @@ const ConfirmModal = ({
               {title}
             </h2>
           )}
-          <p id={descriptionId} className="whitespace-pre-wrap text-[15px] leading-relaxed text-gray-600">
+          <p
+            id={descriptionId}
+            className="whitespace-pre-wrap text-[15px] leading-relaxed text-gray-600"
+          >
             {message}
           </p>
         </div>

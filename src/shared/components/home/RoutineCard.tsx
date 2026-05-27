@@ -20,4 +20,3 @@ const RoutineCard = ({ iconSrc, items }: RoutineCardProps) => {
 };
 
 export default RoutineCard;
-

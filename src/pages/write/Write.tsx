@@ -66,9 +66,7 @@ const getDateError = (buyDate: string, sellDate: string): string => {
     return '';
   }
 
-  return getHoldingDays(buyDate, sellDate) < 0
-    ? '매수일은 매도일보다 늦을 수 없습니다.'
-    : '';
+  return getHoldingDays(buyDate, sellDate) < 0 ? '매수일은 매도일보다 늦을 수 없습니다.' : '';
 };
 
 const fetchDailyReportBeforeNavigate = async (date: string): Promise<DailyReportData | null> => {
@@ -96,7 +94,8 @@ const fetchDailyReportBeforeNavigate = async (date: string): Promise<DailyReport
 const Write = () => {
   const navigate = useNavigate();
 
-  const [tradeLogRequest, setTradeLogRequest] = useState<TradeLogRequest>(INITIAL_TRADE_LOG_REQUEST);
+  const [tradeLogRequest, setTradeLogRequest] =
+    useState<TradeLogRequest>(INITIAL_TRADE_LOG_REQUEST);
   const [buyDate, setBuyDate] = useState('');
   const [emotionTagInput, setEmotionTagInput] = useState('');
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -224,7 +223,9 @@ const Write = () => {
         <Header pageName="Write" />
         <div className="flex flex-col gap-5 px-5 pt-6">
           <section className="pl-[2px]">
-            <p className="text-[12px] font-medium text-gray-500">기록이 쌓일수록 판단이 선명해져요</p>
+            <p className="text-[12px] font-medium text-gray-500">
+              기록이 쌓일수록 판단이 선명해져요
+            </p>
             <h1 className="mt-1 text-[18px] font-bold">매매 기록하기</h1>
           </section>
 
