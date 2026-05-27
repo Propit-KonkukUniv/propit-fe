@@ -18,4 +18,3 @@ const LinkCard = ({ label, leftIcon }: LinkCardProps) => {
 };
 
 export default LinkCard;
-

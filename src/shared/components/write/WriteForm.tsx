@@ -36,8 +36,7 @@ const formatPrice = (value: number): string => {
 const parsePrice = (value: string): number => {
   const normalizedValue = value.replace(/,/g, '').replace(/[^\d.]/g, '');
   const [integerPart = '', decimalPart = ''] = normalizedValue.split('.');
-  const sanitizedValue =
-    decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
+  const sanitizedValue = decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
 
   return sanitizedValue ? Number(sanitizedValue) : 0;
 };
@@ -104,7 +103,9 @@ const WriteForm = ({
           <input
             type="text"
             value={formatPrice(tradeLogRequest.buyPrice)}
-            onChange={(event) => onTradeLogRequestChange('buyPrice', parsePrice(event.target.value))}
+            onChange={(event) =>
+              onTradeLogRequestChange('buyPrice', parsePrice(event.target.value))
+            }
             placeholder="0"
             inputMode="decimal"
             className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
