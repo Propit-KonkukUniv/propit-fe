@@ -50,7 +50,7 @@ const YieldTrend = ({ profitRateTrendSeries }: YieldTrendProps) => {
                 width={36}
               />
               <Tooltip
-                formatter={(value) => [`${String(value ?? 0)}%`, '수익률']}
+                formatter={(value) => [`${Number(value ?? 0).toFixed(2)}%`, '수익률']}
                 labelFormatter={(label) => `${String(label)}월`}
                 contentStyle={{
                   borderRadius: '12px',
