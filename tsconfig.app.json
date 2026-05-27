@@ -24,7 +24,6 @@
     "noUncheckedSideEffectImports": true,
 
     /* Path Alias 설정 추가 */
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@shared/*": ["./src/shared/*"],

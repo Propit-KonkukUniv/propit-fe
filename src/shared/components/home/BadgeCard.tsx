@@ -26,4 +26,3 @@ const BadgeCard = ({ title, subtitle }: BadgeCardProps) => {
 };
 
 export default BadgeCard;
-

@@ -35,4 +35,3 @@ const Top3Card = ({ iconSrc, items }: Top3CardProps) => {
 };
 
 export default Top3Card;
-
