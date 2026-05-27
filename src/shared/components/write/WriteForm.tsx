@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import calender from '@assets/common/calender.svg';
 import coin from '@assets/common/coin.svg';
 import graph from '@assets/common/graph.svg';
@@ -20,6 +21,8 @@ interface WriteFormProps {
   ) => void;
   onBuyDateChange: (value: string) => void;
   onEmotionTagInputChange: (value: string) => void;
+  onImageUpload?: (file: File) => void;
+  isUploading?: boolean;
 }
 
 const formatPrice = (value: number): string => {
@@ -50,10 +53,42 @@ const WriteForm = ({
   onTradeLogRequestChange,
   onBuyDateChange,
   onEmotionTagInputChange,
+  onImageUpload,
+  isUploading = false,
 }: WriteFormProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onImageUpload) {
+      onImageUpload(file);
+    }
+    // 동일한 파일을 다시 선택할 수 있도록 인풋 초기화
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
   return (
     <div className="flex flex-col gap-6 p-5">
       <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+          <span className="text-[14px] font-bold text-gray-800">매매 정보 입력</span>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="flex items-center gap-1.5 rounded-lg bg-[#EEF2FF] px-3 py-2 text-[12px] font-bold text-[#646BFA] shadow-sm transition hover:bg-[#E0E7FF] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <span>{isUploading ? '⏳ 분석 중...' : '📸 스크린샷 첨부'}</span>
+          </button>
+          {/* 숨겨진 파일 인풋 */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/jpeg, image/png, image/jpg"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
         <div className="flex items-center gap-2">
           <img src={calender} alt="calendar" className="w-5" />
           <span className="text-[14px] font-bold">매도일</span>

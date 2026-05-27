@@ -59,7 +59,7 @@ export interface TradeRecord {
 }
 
 export interface EmotionSummary {
-  mostUsedEmotion: string;
+  emotion: string;
   count: number;
 }
 

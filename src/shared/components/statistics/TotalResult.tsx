@@ -57,7 +57,7 @@ const TotalResult = ({ summary }: TotalResultProps) => {
       icon: smile,
       label: '가장 많았던 감정',
       sub: '가장 많았던 감정',
-      val: `${summary.emotionSummary.mostUsedEmotion} (${summary.emotionSummary.count}회)`,
+      val: `${summary.emotionSummary.emotion} (${summary.emotionSummary.count}회)`,
       date: '',
       color: 'text-black',
     },

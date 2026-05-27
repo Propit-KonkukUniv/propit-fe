@@ -29,7 +29,7 @@ const DEFAULT_OVERVIEW_REPORT_DATA: OverviewReportData = {
       date: '',
     },
     emotionSummary: {
-      mostUsedEmotion: NO_RECORD_MESSAGE,
+      emotion: NO_RECORD_MESSAGE,
       count: 0,
     },
     averageHoldingDays: 0,
@@ -94,7 +94,7 @@ const normalizeOverviewReportData = (data?: OverviewReportData | null): Overview
         date: data.summary?.worstTrade?.date || '',
       },
       emotionSummary: {
-        mostUsedEmotion: data.summary?.emotionSummary?.mostUsedEmotion || NO_RECORD_MESSAGE,
+        emotion: data.summary?.emotionSummary?.emotion || NO_RECORD_MESSAGE,
         count: data.summary?.emotionSummary?.count ?? 0,
       },
       averageHoldingDays: data.summary?.averageHoldingDays ?? 0,
