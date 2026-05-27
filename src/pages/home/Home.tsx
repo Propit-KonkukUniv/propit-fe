@@ -11,7 +11,7 @@ import aiIcon from '@assets/common/ai.svg';
 import WritePromptCard from '@shared/components/home/WritePromptCard';
 import RoutineCard from '@shared/components/home/RoutineCard';
 import Top3Card, { type Top3Item } from '@shared/components/home/Top3Card';
-import BadgeCard from '@shared/components/home/BadgeCard';
+//import BadgeCard from '@shared/components/home/BadgeCard';
 import CumulativeReportCard, {
   type CumulativeStatItem,
 } from '@shared/components/home/CumulativeReportCard';
@@ -21,18 +21,22 @@ import Greeting from '@shared/components/home/Greeting';
 import historyIcon from '@assets/home/history.svg';
 import { getHomeApi, type HomePayload } from '@shared/apis/home/homeApi';
 
-const ROUTINE_ITEMS = ['심사숙고', '단타 절대 금지X', '분할매수하기!!'];
+const ROUTINE_ITEMS = [
+  '분산투자로 리스크를 관리하라',
+  '장기적인 관점으로 오래하라',
+  '자신이 잘 이해하는 곳에만 투자하라',
+];
 
 const TOP3: Top3Item[] = [
-  { name: '트레저 글로벌', pct: '+276.8%', color: 'text-[#E11D48]' },
-  { name: 'SMX', pct: '+135.4%', color: 'text-[#E11D48]' },
-  { name: '엔비디아', pct: '-0.5%', color: 'text-[#2563EB]' },
+  { name: 'KODEX 200선물인버스2X', pct: '-5.21%', color: 'text-[#2563EB]' },
+  { name: 'KODEX 인버스', pct: '-2.90%	', color: 'text-[#2563EB]' },
+  { name: '	KODEX SK하이닉스단일종목레버리지', pct: '+18.44%', color: 'text-[#E11D48]' },
 ];
 
 const CUMULATIVE: [CumulativeStatItem, CumulativeStatItem, CumulativeStatItem, CumulativeStatItem] =
   [
     { label: '총 거래 횟수', value: '152회' },
-    { label: '승률', value: '68%' },
+    { label: '수익실현 비율', value: '68%' },
     { label: '누적 손익', value: '+3,500,000원', variant: 'primary' },
     { label: '평균 수익률', value: '+24.5%' },
   ];
@@ -109,9 +113,11 @@ const Home = () => {
           <Top3Card iconSrc={graphIcon} items={TOP3} />
         </Box>
 
-        <Box>
-          <BadgeCard title="탐험가" subtitle="20개 이상 종목 보유" />
-        </Box>
+        {/*
+          <Box>
+            <BadgeCard title="탐험가" subtitle="20개 이상 종목 보유" />
+          </Box>
+        */}
 
         <Box>
           <CumulativeReportCard items={cumulativeFromApi} onMore={() => navigate('/statistics')} />

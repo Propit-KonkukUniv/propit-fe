@@ -5,21 +5,13 @@ interface WritePromptCardProps {
   message?: string;
 }
 
-const WritePromptCard = ({
-  todayLabel,
-  calendarIconSrc,
-  onWrite,
-  message,
-}: WritePromptCardProps) => {
+const WritePromptCard = ({ todayLabel, calendarIconSrc, onWrite }: WritePromptCardProps) => {
   return (
     <div className="flex items-center justify-between gap-4 p-5">
       <div className="flex items-center gap-3">
         <img src={calendarIconSrc} alt="calender" className="h-6 w-6" />
         <div className="flex flex-col gap-1">
           <p className="text-[14px] font-bold text-black">{todayLabel}</p>
-          <p className="text-[12px] text-gray-500">
-            {message ?? '오늘의 매매를 기록하지 않았어요!'}
-          </p>
         </div>
       </div>
 

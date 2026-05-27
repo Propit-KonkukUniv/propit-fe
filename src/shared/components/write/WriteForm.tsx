@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import calender from '@assets/common/calender.svg';
 import coin from '@assets/common/coin.svg';
 import graph from '@assets/common/graph.svg';
@@ -20,13 +21,12 @@ interface WriteFormProps {
   ) => void;
   onBuyDateChange: (value: string) => void;
   onEmotionTagInputChange: (value: string) => void;
+  onImageUpload?: (file: File) => void;
+  isUploading?: boolean;
 }
 
 const formatPrice = (value: number): string => {
-  if (value <= 0) {
-    return '';
-  }
-
+  if (value <= 0) return '';
   return value.toLocaleString('en-US', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 20,
@@ -37,7 +37,6 @@ const parsePrice = (value: string): number => {
   const normalizedValue = value.replace(/,/g, '').replace(/[^\d.]/g, '');
   const [integerPart = '', decimalPart = ''] = normalizedValue.split('.');
   const sanitizedValue = decimalPart.length > 0 ? `${integerPart}.${decimalPart}` : integerPart;
-
   return sanitizedValue ? Number(sanitizedValue) : 0;
 };
 
@@ -50,10 +49,59 @@ const WriteForm = ({
   onTradeLogRequestChange,
   onBuyDateChange,
   onEmotionTagInputChange,
+  onImageUpload,
+  isUploading = false,
 }: WriteFormProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && onImageUpload) {
+      onImageUpload(file);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-6 p-5">
+    //  최상단 div에 relative 추가! (스피너 띄우기 위함)
+    <div className="relative flex flex-col gap-6 p-5">
+      {/* ========================================== */}
+      {/* 🌪️ 로딩 스피너 오버레이 (isUploading 일 때만 등장) */}
+      {/* ========================================== */}
+      {isUploading && (
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-lg bg-white/70 backdrop-blur-sm">
+          {/* 빙글빙글 도는 원 */}
+          <div className="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-[#646BFA]"></div>
+          <p className="mt-3 text-[14px] font-bold text-[#646BFA]">스크린샷을 분석하고 있어요...</p>
+        </div>
+      )}
+
+      {/* ========================================== */}
+      {/* 폼 내용 */}
+      {/* ========================================== */}
       <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+          <span className="text-[14px] font-bold text-gray-800">매매 정보 입력</span>
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={isUploading}
+            className="flex items-center gap-1.5 rounded-lg bg-[#EEF2FF] px-3 py-2 text-[12px] font-bold text-[#646BFA] shadow-sm transition hover:bg-[#E0E7FF] active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <span>📸 스크린샷 자동 채우기</span>
+          </button>
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/jpeg, image/png, image/jpg"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+        </div>
+
+        {/* === 이하 기존 코드와 100% 동일! === */}
         <div className="flex items-center gap-2">
           <img src={calender} alt="calendar" className="w-5" />
           <span className="text-[14px] font-bold">매도일</span>
@@ -75,7 +123,7 @@ const WriteForm = ({
           type="text"
           value={tradeLogRequest.stockName}
           onChange={(event) => onTradeLogRequestChange('stockName', event.target.value)}
-          placeholder="예: Tesla"
+          placeholder="예: 삼성증권"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
         />
       </div>
@@ -89,7 +137,7 @@ const WriteForm = ({
           type="text"
           value={tradeLogRequest.sectorName}
           onChange={(event) => onTradeLogRequestChange('sectorName', event.target.value)}
-          placeholder="예: IT"
+          placeholder="예: 증권"
           className="w-full rounded-lg border border-gray-200 p-3 text-[14px] outline-none focus:border-[#646BFA]"
         />
       </div>
@@ -153,7 +201,7 @@ const WriteForm = ({
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <img src={calendertimer} alt="holding period" className="w-5" />
-          <span className="text-[14px] font-bold">보유 기간</span>
+          <span className="text-[14px] font-bold">매수일</span>
         </div>
         <input
           type="date"
